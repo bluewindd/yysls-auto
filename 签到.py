@@ -11,12 +11,23 @@ ql部署版
 """  
 import os  
 import requests  
+from dotenv import load_dotenv
 
-# push plus的token
-push_plus_token = "xxxxxxxxxxx"  
+# 加载.env文件（仅在本地开发时使用）
+if os.path.exists('.env'):
+    load_dotenv(encoding='utf-8')
 
-# 从环境变量读取 access_token
-access_tokens = os.getenv('yysls_miniapp', '').splitlines()  
+# 从环境变量获取配置
+raw_config = os.getenv('yysls_miniapp', '')
+print(f"原始配置: {raw_config}")
+
+# 从环境变量获取push_plus_token
+push_plus_token = os.getenv('push_plus_token', '')
+print(f"推送token配置: {push_plus_token}")
+
+# 解析配置
+access_tokens = raw_config.splitlines() if raw_config else []
+print(f"解析后的token数量: {len(access_tokens)}")
 
 def send_pushplus_message(token, title, content, topic=''):  
     url = 'http://www.pushplus.plus/send'  
